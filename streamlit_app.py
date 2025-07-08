@@ -11,21 +11,23 @@ st.title("Manga Translator")
 stage = 0
 
 # Stage 0: upload image
-#uploadedfile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
-uploadedfile = st.file_uploader(label = "You can choose up to 13 image files", type=['png', 'jpg', 'jpeg'], accept_multiple_files = True)
-if len(uploadedfile) > 13:
-    st.write("You can choose only up to 13 images")
-else:
-    images_df = pd.DataFrame(columns = [uploadedfile[i] for i in range(len(uploadedfile))])
+uploadedfile = st.file_uploader(label="Upload image", type=['jpg', 'png'], label_visibility = 'collapsed')
+#uploadedfile = st.file_uploader(label = "You can choose up to 13 image files", type=['png', 'jpg', 'jpeg'], accept_multiple_files = True, label_visibility = 'collapsed')
+
+#if uploadedfile is not None:
+#    if len(uploadedfile) > 13:
+#        st.write("You can choose only up to 13 images")
+#        uploadedfile = []
+#    else:
+ #       'Images uploaded successfully'
+
+#else:
+#    st.write("Make sure you images are in JPG/PNG Format.")
 
 
+##st.write(len(uploadedfile))
+#st.dataframe(images_df)
 
-st.write(len(uploadedfile))
-
-img = plt.imread(uploadedfile[2])
-plt.axis('off')
-plt.imshow(img);
-st.image(img)
 
 if uploadedfile is not None:
     img = plt.imread(uploadedfile)
@@ -38,6 +40,8 @@ else:
 
 # Stage 1: get bboxes using pretrained yolo-model
 if stage > 0:
+
+    #images_df = pd.DataFrame(columns = [i for i in range(len(uploadedfile))])
     st.subheader("Find text")
     model = YOLO('data/best.pt')
 
