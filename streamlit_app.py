@@ -29,7 +29,7 @@ else:
 st.subheader("Find text")
 
 #model.load_state_dict(torch.load('data/best.pt'))
-#model = YOLO('data/best.pt')
+model = YOLO('data/best.pt')
 
 col1, col2 = st.columns(2)
 
@@ -39,8 +39,7 @@ with col1:
 with col2:
     iou = st.slider("IOU", 0.0, 1.0, (0.7))
 
-#res = model.predict(source = uploadFile, show = False, show_labels = False, save = False,
-                    #conf = conf, iou = iou)
+res = model.predict(source = uploadFile, show = False, show_labels = False, save = False, conf = conf, iou = iou)
 
 #im0 = run(source=open_cv_image, \
 #  conf_thres=0.25, weights="runs/detect/yolov7.pt")
