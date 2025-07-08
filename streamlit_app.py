@@ -30,13 +30,14 @@ uploadedfile = st.file_uploader(label="Upload image", type=['jpg', 'png'], label
 
 
 if uploadedfile is not None:
-    img = plt.imread(uploadedfile)
-    plt.axis('off')
-    plt.imshow(img);
-    st.image(img)
+    st.write("Image successfully uploaded")
+    #img = plt.imread(uploadedfile)
+    #plt.axis('off')
+    #plt.imshow(img);
+    #st.image(img)
     stage = 1
 else:
-    st.write("Make sure you image is in JPG/PNG Format.")
+    st.write("Make sure you image is in JPG/PNG Format")
 
 # Stage 1: get bboxes using pretrained yolo-model
 if stage > 0:
@@ -61,6 +62,13 @@ if stage > 0:
 
 # Stage 2: show and adjust bboxes
 if stage > 1:
+    img = plt.imread(uploadedfile)
+    plt.axis('off')
+    plt.imshow(img);
+    st.image(img)
+
+
+
     st.write(res[0].boxes)
 
 '''
