@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import cv2
 from ultralytics import YOLO
@@ -63,13 +63,27 @@ if stage > 0:
 # Stage 2: show and adjust bboxes
 if stage > 1:
     img = plt.imread(uploadedfile)
+    fig, ax = plt.subplots()
     plt.axis('off')
+    #plt.imshow(img);
+    #st.image(img)
+
+    bboxes = res[0].boxes.xyxy
+    for bbox in bboxes:
+        bbox = bbox.numpy()
+        st.write(bbox)
+        #bbox = bbox.cpu().detach().numpy()
+        rectangle = mpl.patches.Rectangle((bbox[0], bbox[1]), bbox[2] - bbox[0], bbox[3] - bbox[1], linewidth = 2, edgecolor = 'red', facecolor = 'none', lw = 2)
+        ax.add_patch(rectangle)
+                
     plt.imshow(img);
+    #plt.show();
     st.image(img)
+    #mpl.pyplot.close();
 
 
 
-    st.write(res[0].boxes)
+    st.write(res[0].boxes.xyxy.numpy())
 
 '''
     # show yolo predictions with bboxes
