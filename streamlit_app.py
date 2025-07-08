@@ -8,6 +8,7 @@ from ultralytics import YOLO
 
 st.set_page_config(layout="wide")
 st.title("Manga Translator")
+stage = 0
 
 # Uploading the File to the Page
 uploadedfile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
@@ -16,6 +17,7 @@ uploadedfile = st.file_uploader(label="Upload image", type=['jpg', 'png'])
                  #accept_multiple_files=True)
 
 # Checking the Format of the page
+
 if uploadedfile is not None:
     # Perform your Manupilations (In my Case applying Filters)
     img = plt.imread(uploadedfile)
@@ -23,10 +25,11 @@ if uploadedfile is not None:
     plt.imshow(img);
     st.image(img)
     #st.write("Image Uploaded Successfully")
+    stage = 1
 else:
     st.write("Make sure you image is in JPG/PNG Format.")
 
-
+if stage > 0:
     st.subheader("Find text")
 
     #model.load_state_dict(torch.load('data/best.pt'))
@@ -50,10 +53,10 @@ else:
 
     st.write(res[0].boxes)
 
-    '''
+'''
     # show yolo predictions with bboxes
     def show_pics(image_path, bboxes):
-        
+            
         # read image
         img = cv2.imread(image_path, 1)
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -67,8 +70,8 @@ else:
             bbox = bbox.cpu().detach().numpy()
             rectangle = mpl.patches.Rectangle((bbox[0], bbox[1]), bbox[2], bbox[3], linewidth = 2, edgecolor = 'red', facecolor = 'none', lw = 2)
             ax.add_patch(rectangle)
-            
+                
         plt.imshow(img)
         plt.show();
         mpl.pyplot.close();
-    '''
+'''
