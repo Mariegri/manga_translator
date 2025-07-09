@@ -25,7 +25,7 @@ uploadedfile = st.file_uploader(label="Upload image", type=['jpg', 'png'], label
 #    st.write("Make sure you images are in JPG/PNG Format.")
 
 
-##st.write(len(uploadedfile))
+#st.write(len(uploadedfile))
 #st.dataframe(images_df)
 
 
@@ -71,39 +71,17 @@ if stage > 1:
     bboxes = res[0].boxes.xyxy
     for bbox in bboxes:
         bbox = bbox.numpy()
-        st.write(bbox)
+        #st.write(bbox)
         #bbox = bbox.cpu().detach().numpy()
         rectangle = mpl.patches.Rectangle((bbox[0], bbox[1]), bbox[2] - bbox[0], bbox[3] - bbox[1], linewidth = 2, edgecolor = 'red', facecolor = 'none', lw = 2)
         ax.add_patch(rectangle)
                 
-    plt.imshow(img);
-    #plt.show();
+    plt.imshow(img)
+    plt.show();
     st.image(img)
     #mpl.pyplot.close();
 
 
 
-    st.write(res[0].boxes.xyxy.numpy())
+    #st.write(res[0].boxes.xyxy.numpy())
 
-'''
-    # show yolo predictions with bboxes
-    def show_pics(image_path, bboxes):
-            
-        # read image
-        img = cv2.imread(image_path, 1)
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        img_h, img_w, can = img.shape
-        plt.figure(figsize = (20, 15))
-        fig, ax = plt.subplots()
-        plt.axis('off')
-
-        # add bboxes
-        for bbox in bboxes:
-            bbox = bbox.cpu().detach().numpy()
-            rectangle = mpl.patches.Rectangle((bbox[0], bbox[1]), bbox[2], bbox[3], linewidth = 2, edgecolor = 'red', facecolor = 'none', lw = 2)
-            ax.add_patch(rectangle)
-                
-        plt.imshow(img)
-        plt.show();
-        mpl.pyplot.close();
-'''
