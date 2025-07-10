@@ -41,7 +41,7 @@ if stage > 0:
         iou = st.slider("IOU", 0.0, 1.0, (0.7))  
 
     # get predictions with the model
-    if st.button("Get text", type="primary"):
+    if st.button("Get bboxes", type="primary"):
         image_bytes = uploadedfile.getvalue()
         orig_image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
         res = model.predict(source = orig_image, show = False, show_labels = False, save = False, conf = conf, iou = iou)
@@ -52,18 +52,18 @@ if stage > 1:
     realtime_update = True
     box_color = 'red'
     stroke_width = 3
-    aspect_ratio = 'Free'
+    aspect_ratio = None
     return_type = 'box'
 
     if uploadedfile:
         img = Image.open(uploadedfile)
         rect = st_cropper(
             img,
-            realtime_update=realtime_update,
-            box_color=box_color,
-            aspect_ratio=aspect_ratio,
-            return_type=return_type,
-            stroke_width=stroke_width
+            realtime_update = realtime_update,
+            box_color = box_color,
+            aspect_ratio = aspect_ratio,
+            return_type = return_type,
+            stroke_width = stroke_width
             )
         raw_image = np.asarray(img).astype('uint8')
         left, top, width, height = tuple(map(int, rect.values()))
