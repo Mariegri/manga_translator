@@ -5,5 +5,5 @@ matplotlib
 ultralytics
 opencv-python-headless
 #streamlit_drawable_canvas 
-streamlit_image_annotation
+#streamlit_image_annotation
 Pillow
