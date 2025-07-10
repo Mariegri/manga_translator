@@ -6,10 +6,36 @@ import matplotlib.pyplot as plt
 import cv2
 from ultralytics import YOLO
 from streamlit_drawable_canvas import st_canvas
-from Pillow import Image
+from streamlit_image_annotation import detection
+from PIL import Image
 
 st.set_page_config(layout="wide")
 st.title("Manga Translator")
+
+# get image url
+#from streamlit import config
+#from streamlit.session_data import get_url
+#from streamlit.elements.image import (
+#    _BytesIO_to_bytes,
+#    _normalize_to_bytes,
+#    MAXIMUM_CONTENT_WIDTH,
+##)
+#from streamlit.in_memory_file_manager import (
+#    _calculate_file_id,
+#    _get_extension_for_mimetype,
+#    STATIC_MEDIA_ENDPOINT,
+#)
+
+#def img_url(image):
+#    mimetype = image.type
+#    data = _BytesIO_to_bytes(image)
+#    data, mimetype = _normalize_to_bytes(data, MAXIMUM_CONTENT_WIDTH, mimetype)
+#    extension = _get_extension_for_mimetype(mimetype)
+#    file_id = _calculate_file_id(data=data, mimetype=mimetype)
+#    URL = get_url(config.get_option("browser.serverAddress"))
+#    return "{}{}/{}{}".format(URL, STATIC_MEDIA_ENDPOINT, file_id, extension)
+
+
 stage = 0
 
 # Stage 0: upload image
@@ -64,6 +90,46 @@ if stage > 0:
 
 # Stage 2: show and adjust bboxes
 if stage > 1:
+
+
+
+
+
+
+
+
+
+
+    #detection(
+    #    image_path = img_url(uploadedfile),
+    #    label_list = None, #(List[str])
+    #    bboxes = None, #Optional[List[List[int, int, int, int]]] = None,
+    #    labels = None, #Optional[List[int]] = None,
+    #    height = 512,
+    #    width = 512,
+    #    line_width = 2,
+    #    use_space = False,
+    #    key = None
+    #)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #img = plt.imread(uploadedfile)
     #fig, ax = plt.subplots()
     #plt.axis('off')
@@ -86,32 +152,35 @@ if stage > 1:
 
 
     #st.write(res[0].boxes.xyxy.numpy())
+    #'''
+    #with st.echo("below"):
+    #    drawing_mode = "rect"
+    #    stroke_width = 2
+    #    stroke_color = 'red'
+    #    bg_image = uploadedfile
+    #    realtime_update = True
 
-    drawing_mode = "rect"
-    stroke_width = 2
-    stroke_color = 'red'
-    realtime_update = True
+        # Create a canvas component
+    #    canvas_result = st_canvas(
+    #        fill_color = None,  
+    #        stroke_width = stroke_width,
+    #        stroke_color = stroke_color,
+    #        background_color = None,
+    #        background_image = Image.open(bg_image) if bg_image else None,
+    #        update_streamlit = realtime_update,
+    #        height = 250,
+    #        drawing_mode = drawing_mode,
+    #        point_display_radius = 0,
+    #        display_toolbar = True,
+    #        key = "full_app",
+    #    )
 
-    # Create a canvas component
-    canvas_result = st_canvas(
-        fill_color = None,  
-        stroke_width = stroke_width,
-        stroke_color = stroke_color,
-        background_color = None,
-        background_image = Image.open(uploadedfile),
-        update_streamlit = realtime_update,
-        height = 250,
-        drawing_mode = drawing_mode,
-        point_display_radius = 0,
-        display_toolbar = True,
-        key="full_app",
-    )
-
-    # Do something interesting with the image data and paths
-    if canvas_result.image_data is not None:
-        st.image(canvas_result.image_data)
-    if canvas_result.json_data is not None:
-        objects = pd.json_normalize(canvas_result.json_data["objects"])
-        for col in objects.select_dtypes(include=["object"]).columns:
-            objects[col] = objects[col].astype("str")
-        st.dataframe(objects)
+        # Do something interesting with the image data and paths
+    #    if canvas_result.image_data is not None:
+    #        st.image(canvas_result.image_data)
+    #    if canvas_result.json_data is not None:
+    #        objects = pd.json_normalize(canvas_result.json_data["objects"])
+    #        for col in objects.select_dtypes(include=["object"]).columns:
+    #            objects[col] = objects[col].astype("str")
+    #        st.dataframe(objects)
+    #    '''
