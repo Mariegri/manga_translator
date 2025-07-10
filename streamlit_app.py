@@ -5,9 +5,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import cv2
 from ultralytics import YOLO
+import plotly.express as px
 #from streamlit_drawable_canvas import st_canvas
 #from streamlit_image_annotation import detection
-from streamlit_cropper import st_cropper
+#from streamlit_cropper import st_cropper
 from PIL import Image
 
 st.set_page_config(layout="wide")
@@ -49,7 +50,22 @@ if stage > 0:
         stage = 2
 
 # Stage 2: show and adjust bboxes
-if stage > 1:
+if stage > 1:   
+    img = orig_image # or any image represented as a numpy array
+    fig = px.imshow(img)
+    # Define dragmode, newshape parameters, amd add modebar buttons
+    fig.update_layout(
+        dragmode = 'drawrect', # define dragmode
+        newshape = dict(line_color = 'red'))
+    # Add modebar buttons
+    fig.show(config = {'modeBarButtonsToAdd':['drawline',
+                                              'drawopenpath',
+                                              'drawclosedpath',
+                                              'drawcircle',
+                                              'drawrect',
+                                              'eraseshape'
+                                        ]})
+    st.write(newshape)
 
 
 
@@ -66,37 +82,37 @@ if stage > 1:
 
 
 
-if stage > 10:
-    realtime_update = True
-    box_color = 'red'
-    stroke_width = 3
-    aspect_ratio = None
-    return_type = 'box'
+#if stage > 10:
+#    realtime_update = True
+#    box_color = 'red'
+#    stroke_width = 3
+#    aspect_ratio = None
+#    return_type = 'box'
 
-    if uploadedfile:
-        img = Image.open(uploadedfile)
+#    if uploadedfile:
+#        img = Image.open(uploadedfile)
 
-        component_value = _component_func(canvasWidth=canvas_width, canvasHeight=canvas_height,
-                                      realtimeUpdate=realtime_update, strokeWidth=stroke_width,
-                                      rectHeight=rect_height, rectWidth=rect_width, rectLeft=rect_left, rectTop=rect_top,
-                                      boxColor=box_color, imageData=image_data, lockAspect=lock_aspect, key=key)
+#        component_value = _component_func(canvasWidth=canvas_width, canvasHeight=canvas_height,
+#                                      realtimeUpdate=realtime_update, strokeWidth=stroke_width,
+#                                      rectHeight=rect_height, rectWidth=rect_width, rectLeft=rect_left, rectTop=rect_top,
+#                                      boxColor=box_color, imageData=image_data, lockAspect=lock_aspect, key=key)
 
         # Return a cropped image using the box from the frontend
-        if component_value:
-            rect = component_value['coords']
+#        if component_value:
+#            rect = component_value['coords']
 
 
-        rect = st_cropper(
-            img,
-            realtime_update = realtime_update,
-            box_color = box_color,
-            aspect_ratio = aspect_ratio,
-            return_type = return_type,
-            stroke_width = stroke_width
-            )
-        raw_image = np.asarray(img).astype('uint8')
-        left, top, width, height = bboxes[0][0], bboxes[0][1], bboxes[0][2] - bboxes[0][0], bboxes[0][3] - bboxes[0][1]
-        st.write(rect)
-        masked_image = np.zeros(raw_image.shape, dtype='uint8')
-        masked_image[top:top + height, left:left + width] = raw_image[top:top + height, left:left + width]
-        st.image(Image.fromarray(masked_image), caption='masked image')
+#        rect = st_cropper(
+#            img,
+#            realtime_update = realtime_update,
+#            box_color = box_color,
+#            aspect_ratio = aspect_ratio,
+#            return_type = return_type,
+#            stroke_width = stroke_width
+#            )
+#        raw_image = np.asarray(img).astype('uint8')
+#        left, top, width, height = bboxes[0][0], bboxes[0][1], bboxes[0][2] - bboxes[0][0], bboxes[0][3] - bboxes[0][1]
+#        st.write(rect)
+#        masked_image = np.zeros(raw_image.shape, dtype='uint8')
+#        masked_image[top:top + height, left:left + width] = raw_image[top:top + height, left:left + width]
+#        st.image(Image.fromarray(masked_image), caption='masked image')
