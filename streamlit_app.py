@@ -45,10 +45,28 @@ if stage > 0:
         image_bytes = uploadedfile.getvalue()
         orig_image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
         res = model.predict(source = orig_image, show = False, show_labels = False, save = False, conf = conf, iou = iou)
+        bboxes = res[0].boxes
         stage = 2
 
 # Stage 2: show and adjust bboxes
 if stage > 1:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+if stage > 10:
     realtime_update = True
     box_color = 'red'
     stroke_width = 3
@@ -57,6 +75,17 @@ if stage > 1:
 
     if uploadedfile:
         img = Image.open(uploadedfile)
+
+        component_value = _component_func(canvasWidth=canvas_width, canvasHeight=canvas_height,
+                                      realtimeUpdate=realtime_update, strokeWidth=stroke_width,
+                                      rectHeight=rect_height, rectWidth=rect_width, rectLeft=rect_left, rectTop=rect_top,
+                                      boxColor=box_color, imageData=image_data, lockAspect=lock_aspect, key=key)
+
+        # Return a cropped image using the box from the frontend
+        if component_value:
+            rect = component_value['coords']
+
+
         rect = st_cropper(
             img,
             realtime_update = realtime_update,
@@ -66,7 +95,7 @@ if stage > 1:
             stroke_width = stroke_width
             )
         raw_image = np.asarray(img).astype('uint8')
-        left, top, width, height = tuple(map(int, rect.values()))
+        left, top, width, height = bboxes[0][0], bboxes[0][1], bboxes[0][2] - bboxes[0][0], bboxes[0][3] - bboxes[0][1]
         st.write(rect)
         masked_image = np.zeros(raw_image.shape, dtype='uint8')
         masked_image[top:top + height, left:left + width] = raw_image[top:top + height, left:left + width]
