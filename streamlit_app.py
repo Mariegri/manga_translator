@@ -5,8 +5,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import cv2
 from ultralytics import YOLO
-from streamlit_drawable_canvas import st_canvas
-from streamlit_image_annotation import detection
+#from streamlit_drawable_canvas import st_canvas
+#from streamlit_image_annotation import detection
+from streamlit_cropper import st_cropper
 from PIL import Image
 
 st.set_page_config(layout="wide")
@@ -116,20 +117,6 @@ if stage > 1:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     #img = plt.imread(uploadedfile)
     #fig, ax = plt.subplots()
     #plt.axis('off')
@@ -183,4 +170,5 @@ if stage > 1:
     #        for col in objects.select_dtypes(include=["object"]).columns:
     #            objects[col] = objects[col].astype("str")
     #        st.dataframe(objects)
-   
+
+
