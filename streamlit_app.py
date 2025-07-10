@@ -55,7 +55,7 @@ if stage > 1:
     aspect_ratio = 'Free'
     return_type = 'box'
 
-    if img_file:
+    if uploadedfile:
         img = Image.open(uploadedfile)
         rect = st_cropper(
             img,
