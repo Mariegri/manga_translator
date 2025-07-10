@@ -5,6 +5,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import cv2
 from ultralytics import YOLO
+from streamlit_drawable_canvas import st_canvas
+from Pillow import Image
 
 st.set_page_config(layout="wide")
 st.title("Manga Translator")
@@ -62,26 +64,54 @@ if stage > 0:
 
 # Stage 2: show and adjust bboxes
 if stage > 1:
-    img = plt.imread(uploadedfile)
-    fig, ax = plt.subplots()
-    plt.axis('off')
+    #img = plt.imread(uploadedfile)
+    #fig, ax = plt.subplots()
+    #plt.axis('off')
     #plt.imshow(img);
     #st.image(img)
 
-    bboxes = res[0].boxes.xyxy
-    for bbox in bboxes:
-        bbox = bbox.numpy()
+    #bboxes = res[0].boxes.xyxy
+    #for bbox in bboxes:
+    #    bbox = bbox.numpy()
         #st.write(bbox)
         #bbox = bbox.cpu().detach().numpy()
-        rectangle = mpl.patches.Rectangle((bbox[0], bbox[1]), bbox[2] - bbox[0], bbox[3] - bbox[1], linewidth = 2, edgecolor = 'red', facecolor = 'none', lw = 2)
-        ax.add_patch(rectangle)
+    #    rectangle = mpl.patches.Rectangle((bbox[0], bbox[1]), bbox[2] - bbox[0], bbox[3] - bbox[1], linewidth = 2, edgecolor = 'red', facecolor = 'none', lw = 2)
+    #    ax.add_patch(rectangle)
                 
-    plt.imshow(img)
-    plt.show();
-    st.image(img)
+    #plt.imshow(img)
+    #plt.show();
+    #st.image(img)
     #mpl.pyplot.close();
 
 
 
     #st.write(res[0].boxes.xyxy.numpy())
 
+    drawing_mode = "rect"
+    stroke_width = 2
+    stroke_color = 'red'
+    realtime_update = True
+
+    # Create a canvas component
+    canvas_result = st_canvas(
+        fill_color = None,  
+        stroke_width = stroke_width,
+        stroke_color = stroke_color,
+        background_color = None,
+        background_image = Image.open(uploadedfile),
+        update_streamlit = realtime_update,
+        height = 250,
+        drawing_mode = drawing_mode,
+        point_display_radius = 0,
+        display_toolbar = True,
+        key="full_app",
+    )
+
+    # Do something interesting with the image data and paths
+    if canvas_result.image_data is not None:
+        st.image(canvas_result.image_data)
+    if canvas_result.json_data is not None:
+        objects = pd.json_normalize(canvas_result.json_data["objects"])
+        for col in objects.select_dtypes(include=["object"]).columns:
+            objects[col] = objects[col].astype("str")
+        st.dataframe(objects)

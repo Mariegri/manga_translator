@@ -4,3 +4,5 @@ numpy
 matplotlib
 ultralytics
 opencv-python-headless
+streamlit_drawable_canvas 
+Pillow
