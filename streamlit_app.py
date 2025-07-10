@@ -152,7 +152,7 @@ if stage > 1:
 
 
     #st.write(res[0].boxes.xyxy.numpy())
-    #'''
+
     #with st.echo("below"):
     #    drawing_mode = "rect"
     #    stroke_width = 2
@@ -183,4 +183,4 @@ if stage > 1:
     #        for col in objects.select_dtypes(include=["object"]).columns:
     #            objects[col] = objects[col].astype("str")
     #        st.dataframe(objects)
-    #    '''
+   
