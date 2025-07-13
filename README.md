@@ -1,8 +1,6 @@
-# 🎈 Blank app template
+# Manga Translator
 
-A simple Streamlit app template for you to modify!
-
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://blank-app-template.streamlit.app/)
+It's a basic version of manga translator, which is expected to be enriched in future with movable bboxes with a possibility to change translated text in them.
 
 ### How to run it on your own machine
 
