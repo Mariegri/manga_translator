@@ -6,6 +6,4 @@ ultralytics
 opencv-python-headless
 Pillow
 plotly-express
-#streamlit_cropper
 #streamlit_drawable_canvas 
-#streamlit_image_annotation

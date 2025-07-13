@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 import cv2
 from ultralytics import YOLO
 import plotly.express as px
-#from streamlit_drawable_canvas import st_canvas
-#from streamlit_image_annotation import detection
-#from streamlit_cropper import st_cropper
 from PIL import Image
 
 st.set_page_config(layout="wide")
@@ -17,14 +14,9 @@ stage = 0
 
 # Stage 0: upload image
 uploadedfile = st.file_uploader(label="Upload image", type=['jpg', 'png'], label_visibility = 'collapsed')
-#uploadedfile = st.file_uploader(label = "You can choose up to 13 image files", type=['png', 'jpg', 'jpeg'], accept_multiple_files = True, label_visibility = 'collapsed')
 
 if uploadedfile is not None:
     st.write("Image successfully uploaded")
-    #img = plt.imread(uploadedfile)
-    #plt.axis('off')
-    #plt.imshow(img);
-    #st.image(img)
     stage = 1
 else:
     st.write("Make sure you image is in JPG/PNG Format")
@@ -37,82 +29,49 @@ if stage > 0:
     # add conf and iou changers
     col1, col2 = st.columns(2)
     with col1:
-        conf = st.slider("Conf", 0.0, 1.0, (0.2))
+        conf = st.slider("Conf", 0.0, 1.0, (0.4))
     with col2:
-        iou = st.slider("IOU", 0.0, 1.0, (0.7))  
+        iou = st.slider("IOU", 0.0, 1.0, (0.4))  
 
     # get predictions with the model
     if st.button("Get bboxes", type="primary"):
         image_bytes = uploadedfile.getvalue()
         orig_image = cv2.imdecode(np.frombuffer(image_bytes, np.uint8), cv2.IMREAD_COLOR)
         res = model.predict(source = orig_image, show = False, show_labels = False, save = False, conf = conf, iou = iou)
-        bboxes = res[0].boxes
+        bboxes = res[0].boxes.xyxy
         stage = 2
-
+        
 # Stage 2: show and adjust bboxes
 if stage > 1:   
-    img = orig_image # or any image represented as a numpy array
-    fig = px.imshow(img)
-    # Define dragmode, newshape parameters, amd add modebar buttons
-    fig.update_layout(
-        dragmode = 'drawrect', # define dragmode
-        newshape = dict(line_color = 'red'))
-    # Add modebar buttons
-    fig.show(config = {'modeBarButtonsToAdd':['drawline',
-                                              'drawopenpath',
-                                              'drawclosedpath',
-                                              'drawcircle',
-                                              'drawrect',
-                                              'eraseshape'
-                                        ]})
-    st.write(newshape)
+    
+    # add to figure
+    fig, ax = plt.subplots(figsize = (15, 10))
+    plt.imshow(orig_image);
+    plt.axis('off')
 
+    # add bboxes from model predictions
+    for i in range(len(bboxes)):
+        bbox = bboxes[i].cpu().detach().numpy()
+        rectangle = mpl.patches.Rectangle((bbox[0], bbox[1]), bbox[2] - bbox[0], bbox[3] - bbox[1], linewidth = 2, edgecolor = 'red', facecolor = 'none', lw = 2)
+        ax.add_patch(rectangle)
+        bbox_name = 'bbox' + str(i)
+        ax.annotate(bbox_name, xy = (bbox[0], bbox[1]), color = 'red')
+            
+    st.pyplot(fig)
+    stage = 3
 
+if stage > 2:
+    st.subheader("Clean text")
+    
+    if st.button("Clean text", type = "primary"):
+        img_h, img_w, can = orig_image.shape
+        mask = np.zeros(orig_image.shape[:2], dtype="uint8")
+        for bbox in bboxes:
+            cv2.rectangle(mask, (int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])), 255, thickness = -1)
+        cleared_image = cv2.inpaint(orig_image, mask, 1, cv2.INPAINT_TELEA)
+        st.write(cleared_image)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-#if stage > 10:
-#    realtime_update = True
-#    box_color = 'red'
-#    stroke_width = 3
-#    aspect_ratio = None
-#    return_type = 'box'
-
-#    if uploadedfile:
-#        img = Image.open(uploadedfile)
-
-#        component_value = _component_func(canvasWidth=canvas_width, canvasHeight=canvas_height,
-#                                      realtimeUpdate=realtime_update, strokeWidth=stroke_width,
-#                                      rectHeight=rect_height, rectWidth=rect_width, rectLeft=rect_left, rectTop=rect_top,
-#                                      boxColor=box_color, imageData=image_data, lockAspect=lock_aspect, key=key)
-
-        # Return a cropped image using the box from the frontend
-#        if component_value:
-#            rect = component_value['coords']
-
-
-#        rect = st_cropper(
-#            img,
-#            realtime_update = realtime_update,
-#            box_color = box_color,
-#            aspect_ratio = aspect_ratio,
-#            return_type = return_type,
-#            stroke_width = stroke_width
-#            )
-#        raw_image = np.asarray(img).astype('uint8')
-#        left, top, width, height = bboxes[0][0], bboxes[0][1], bboxes[0][2] - bboxes[0][0], bboxes[0][3] - bboxes[0][1]
-#        st.write(rect)
-#        masked_image = np.zeros(raw_image.shape, dtype='uint8')
-#        masked_image[top:top + height, left:left + width] = raw_image[top:top + height, left:left + width]
-#        st.image(Image.fromarray(masked_image), caption='masked image')
+    #fig, ax = plt.subplots(figsize = (15, 10))
+    #plt.imshow(cleared_image);
+    #plt.axis('off')
+    #st.pyplot(fig)
