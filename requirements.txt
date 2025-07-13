@@ -6,4 +6,6 @@ ultralytics
 opencv-python-headless
 Pillow
 plotly-express
+manga_ocr
+transformers
 #streamlit_drawable_canvas 
